@@ -6,10 +6,15 @@
 </head>
 <body style="background-color: burlywood">
 <div style="text-align: center">
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
     <h1>
-        WELCOME HOME!
+        USERS
     </h1>
+    {% for user in users %}
+        <p>
+               <a href="{% url 'home' user.id %}">{{user.first_name}} {{user.last_name}}</a>
+
+        </p>
+        {% endfor %}
 </div>
 
 </body>

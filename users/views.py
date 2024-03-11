@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 
 
 
+
 class LoginPageView(View):
     def get(self, request):
         return render(request, 'users/login.html')
@@ -17,8 +18,9 @@ class LoginPageView(View):
             return redirect('login')
 
         else:
-            return redirect('home')
-
+            user_x = User.objects.all()
+            context = {'users': user_x}
+            return render(request, 'users/home.html', context)
 
 
 class RegisterPageView(View):
@@ -43,8 +45,12 @@ class RegisterPageView(View):
         return redirect('login')
 
 
-class HomePageView(View):
 
+
+
+class ProfilePageView(View):
     def get(self, request):
-        return render(request, 'users/home.html')
+        user = User.objects.all()
+        context = {'users': user}
+        return render(request, 'users/home.html', context)
 
