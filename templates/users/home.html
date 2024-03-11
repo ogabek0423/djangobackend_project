@@ -11,7 +11,7 @@
     </h1>
     {% for user in users %}
         <p>
-               <a href="{% url 'home' user.id %}">{{user.first_name}} {{user.last_name}}</a>
+               <a href="{% url 'u_detail' user.id %}">{{user.first_name}} {{user.last_name}}</a>
 
         </p>
         {% endfor %}

@@ -54,3 +54,10 @@ class ProfilePageView(View):
         context = {'users': user}
         return render(request, 'users/home.html', context)
 
+
+
+class UserDetailView(View):
+    def get(self, request, id):
+        user_y = User.objects.get(id=id)
+        context = {'user': user_y}
+        return render(request, 'users/user_detail.html', context)
