@@ -7,6 +7,11 @@
 <body>
     <div>
         <h1>BOOKS: </h1>
+        <form action="">
+        <input type="search" name="search" value="{{ search }}" placeholder="Search Book">
+        <button type="submit">Search</button>
+
+        </form>  <br>
         {% for book in books %}
         <p>
                <a href="{% url 'a_detail' book.id %}">{{book.title}}</a>

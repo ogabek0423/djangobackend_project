@@ -11,31 +11,11 @@
     <h1>REGISTER</h1>
         <form method="POST" action="">
 
-            {% csrf_token %}
+      {% csrf_token %}
+      {{ form.as_p }}
 
-            <label for="firstname">FIRST NAME: </label>
-            <input id="firstname" type="text" name="firstname">
-            <br><br>
-
-            <label for="lastname">LAST NAME: </label>
-            <input id="lastname" type="text" name="lastname">
-            <br><br>
-
-            <label for="email">EMAIL: </label>
-            <input id="email" type="text" name="email">
-            <br><br>
-
-            <label for="username">USERNAME: </label>
-            <input id="username" type="text" name="username">
-            <br><br>
-
-            <label for="password">PASSWORD: </label>
-            <input id="password" type="text" name="password">
-            <br><br>
-            <div>
-            <button style="background-color: #ba2121" type="submit"><strong>YUBORISH</strong></button>
-            </div>
-        </form>
+      <button type="submit">Submit</button>
+  </form>
     </div>
     </div>
 </body>

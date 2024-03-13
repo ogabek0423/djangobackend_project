@@ -1,63 +1,97 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib.auth.forms import AuthenticationForm
+from django.http import HttpResponse
+from .forms import UserLoginForm, UserRegisterForm
 
 
-
-
-class LoginPageView(View):
+class HomePageView(View):
     def get(self, request):
-        return render(request, 'users/login.html')
+        return render(request, 'users/home.html')
+
+
+class UserLoginView(View):
+    def get(self, request):
+        form = UserLoginForm()
+        context = {'form': form}
+        return render(request, 'users/login.html', context)
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
+        login_form = AuthenticationForm(data=request.POST)
+        if login_form.is_valid():
+            user = login_form.get_user()
+            login(request, user)
+            return redirect('users:home')
+        else:
+            context = {'form': login_form}
+            return render(request, 'users/login.html', context)
 
-        user = User.objects.filter(username=username)
-        if len(user) == 0:
-            return redirect('login')
+
+class UserRegisterView(View):
+    def get(self, request):
+        form = UserRegisterForm()
+        context = {'form': form}
+        return render(request, 'users/register.html', context)
+
+
+
+    def post(self, request):
+        create_form = UserRegisterForm(data=request.POST)
+        if create_form.is_valid():
+            create_form.save()
+            return redirect('users:login')
 
         else:
-            user_x = User.objects.all()
-            context = {'users': user_x}
-            return render(request, 'users/home.html', context)
+            context = {'form': create_form}
+            return render(request, 'users/register.html', context)
 
 
-class RegisterPageView(View):
+class UserListView(View):
     def get(self, request):
-        return render(request, 'users/register.html')
-
+        search = request.GET.get('search')
+        if not search:
+            users = User.objects.all()
+            return render(request, 'users/users.html', {'users': users})
+        else:
+            user = User.objects.filter(first_name__icontains=search) | User.objects.filter(last_name__icontains=search)
+            if not user:
+                return HttpResponse('<h1>NOT FOUND</h1>')
+            else:
+                context = {'users': user,
+                           'search': search}
+                return render(request, 'users/users.html', context)
 
     def post(self, request):
-        username = request.POST['username']
-        password = request.POST['password']
-        first_name = request.POST['firstname']
-        last_name = request.POST['lastname']
-        email = request.POST['email']
-
-        user = User(
-            username=username,
-            first_name=first_name,
-            last_name=last_name,
-            email=email)
-        user.set_password(password)
-        user.save()
-        return redirect('login')
-
-
-
-
-
-class ProfilePageView(View):
-    def get(self, request):
-        user = User.objects.all()
-        context = {'users': user}
-        return render(request, 'users/home.html', context)
-
+        pass
 
 
 class UserDetailView(View):
     def get(self, request, id):
-        user_y = User.objects.get(id=id)
-        context = {'user': user_y}
-        return render(request, 'users/user_detail.html', context)
+        user = User.objects.get(id=id)
+        return render(request, 'users/user_detail.html', {'user': user})
+
+
+class UserSettingView(View):
+    def get(self, request, id):
+        user = User.objects.get(id=id)
+        return render(request, 'users/settings.html', {'user': user})
+
+    def post(self, request, id):
+        first_name = request.POST('first_name')
+        last_name = request.POST('last_name')
+        password = request.POST('password')
+
+        user = User.objects.get(id=id)
+        user.first_name = first_name
+        user.last_name = last_name
+        user.set_password(password)
+        user.save()
+        return HttpResponse('<h1>SUCCESS</h1>')
+
+
+class ProfileView(View):
+    def get(self, request):
+        return render(request, 'users/profile.html', {'user': request.user})
+

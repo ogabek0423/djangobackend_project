@@ -1,35 +1,29 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class Book(models.Model):
     title = models.CharField(max_length=20)
     description = models.TextField()
-    price = models.FloatField()
-    count = models.IntegerField()
-
-    def __str__(self):
-        return f"{self.title},{self.description},{self.price},{self.count}\n"
+    price = models.FloatField(default=1)
+    count = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=1)
 
 
 class Student(models.Model):
+    ROLE = (
+        ('Student', 'Student'),
+        ('Manager', 'Manager'))
+
     first_name = models.CharField(max_length=20)
     last_name = models.CharField(max_length=20)
-    group_name = models.CharField(max_length=20)
-    username = models.CharField(max_length=20)
-    password = models.CharField(max_length=20)
-
-    def __str__(self):
-        return f"{self.first_name},{self.last_name},{self.group_name}"
+    role = models.CharField(max_length=20, choices=ROLE, default='Student')
 
 
-class Booking_book(models.Model):
-    book_id = models.ForeignKey(Book, on_delete=models.CASCADE)
-    student_id = models.ForeignKey(Student, on_delete=models.CASCADE)
-    talked_date = models.DateTimeField()
-
-    def __str__(self):
-        return f"{self.book_id},{self.student_id},{self.talked_date}"
-
+class IjaraKitob(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    returned_date = models.DateTimeField(null=True, blank=True)
+    created_date = models.DateTimeField(auto_created=True)
 
 
 

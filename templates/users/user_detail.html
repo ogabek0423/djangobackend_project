@@ -11,10 +11,11 @@
                 <h3>ISMI : {{user.first_name}} <br>
                     FAMILIYASI : {{user.last_name}} <br>
                     USERNAME : {{user.username}} <br>
-                    PASSWORD : {{user.password}} <br>
+                    PASSWORD : ******** <br>
                     EMAIL : {{user.email}} <br>
                 </h3>
             </p>
+            <a href="{% url 'users:settings' user.id %}"><button type="submit">Settings</button></a>
         </div>
 </body>
 </html>

@@ -13,10 +13,16 @@ class BookListView(View):
             context = {'books': books}
             return render(request, 'library/book.html', context)
         else:
-            books = Book.objects.filter(title__icontains=search)
-            context = {'books': books}
-            return render(request, 'library/book.html', context)
+            book = Book.objects.filter(title__icontains=search)
+            if not book:
+                return HttpResponse('<h1>No book found</h1>')
+            else:
+                context = {'books': book,
+                           'search': search}
+                return render(request, 'library/book.html', context)
 
+        books = Book.objects.all()
+        return render(request, 'library/book.html', {'books': books})
 
 
 class BookDetailView(View):
