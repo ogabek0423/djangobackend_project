@@ -12,13 +12,13 @@
         <button type="submit">Search</button>
     </form>
 
-    <ul>
-        {% for user in users %}
-            <li>
-                <a href="{% url 'users:users-detail' user.id %}">{{user.username}} {{ user.first_name}} {{ user.last_name}}</a>
-            </li>
-        {% endfor %}
-    </ul>
+    <P>
+
+                <a href="{% url 'users-detail' %}">USERS</a> | <a href="{% url 'books' %}"></a>
+
+    </P>
+
+
 
 </body>
 </html>

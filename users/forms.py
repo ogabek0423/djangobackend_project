@@ -15,9 +15,6 @@ class UserRegisterForm(forms.ModelForm):
         return user
 
 class UserLoginForm(forms.Form):
-    username = forms.CharField(max_length=50)
-    password = forms.CharField(max_length=50)
-
-    def clean(self):
-        username = self.cleaned_data['username']
-        password = self.cleaned_data['password']
+    class Meta:
+        model = User
+        fields = ['username', 'password']

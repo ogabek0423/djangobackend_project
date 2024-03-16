@@ -5,28 +5,42 @@ from django.contrib.auth import login
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from .forms import UserLoginForm, UserRegisterForm
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 
 class HomePageView(View):
     def get(self, request):
-        return render(request, 'users/home.html')
+        return render(request, 'landing_page.html')
 
 
 class UserLoginView(View):
     def get(self, request):
         form = UserLoginForm()
-        context = {'form': form}
-        return render(request, 'users/login.html', context)
+        context = {
+            "form": form
+        }
+        return render(request, "users/login.html", context)
 
     def post(self, request):
+        username = request.POST["username"]
+        password = request.POST["password"]
+        data = {
+            "username": username,
+            "password": password
+        }
         login_form = AuthenticationForm(data=request.POST)
+
         if login_form.is_valid():
             user = login_form.get_user()
             login(request, user)
-            return redirect('users:home')
+
+            return redirect("landing-page")
         else:
-            context = {'form': login_form}
-            return render(request, 'users/login.html', context)
+
+            context = {
+                "form": login_form,
+            }
+            return render(request, "users/login.html", context)
 
 
 class UserRegisterView(View):
@@ -36,19 +50,18 @@ class UserRegisterView(View):
         return render(request, 'users/register.html', context)
 
 
-
     def post(self, request):
         create_form = UserRegisterForm(data=request.POST)
         if create_form.is_valid():
             create_form.save()
-            return redirect('users:login')
+            return redirect('login')
 
         else:
             context = {'form': create_form}
             return render(request, 'users/register.html', context)
 
 
-class UserListView(View):
+class UserListView(LoginRequiredMixin, View):
     def get(self, request):
         search = request.GET.get('search')
         if not search:
@@ -79,9 +92,9 @@ class UserSettingView(View):
         return render(request, 'users/settings.html', {'user': user})
 
     def post(self, request, id):
-        first_name = request.POST('first_name')
-        last_name = request.POST('last_name')
-        password = request.POST('password')
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        password = request.POST['password']
 
         user = User.objects.get(id=id)
         user.first_name = first_name

@@ -3,9 +3,9 @@ from django.views import View
 from django.contrib.auth.models import User
 from django.http import HttpResponse
 from .models import Book
+from django.contrib.auth.mixins import LoginRequiredMixin
 
-
-class BookListView(View):
+class BookListView(LoginRequiredMixin, View):
     def get(self, request):
         search =request.GET.get('search')
         if not search:

@@ -8,6 +8,9 @@ class Book(models.Model):
     price = models.FloatField(default=1)
     count = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(100)], default=1)
 
+    def __str__(self):
+        return f'{self.title}'
+
 
 class Student(models.Model):
     ROLE = (
@@ -18,6 +21,8 @@ class Student(models.Model):
     last_name = models.CharField(max_length=20)
     role = models.CharField(max_length=20, choices=ROLE, default='Student')
 
+    def __str__(self):
+        return f'{self.first_name} {self.last_name}'
 
 class IjaraKitob(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
