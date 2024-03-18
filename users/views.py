@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib.auth.forms import AuthenticationForm
 from django.http import HttpResponse
 from .forms import UserLoginForm, UserRegisterForm
@@ -59,6 +59,15 @@ class UserRegisterView(View):
         else:
             context = {'form': create_form}
             return render(request, 'users/register.html', context)
+
+
+class LogOutView(View):
+    def get(self, request):
+        logout(request)
+
+
+
+        return redirect('landing-page')
 
 
 class UserListView(LoginRequiredMixin, View):
