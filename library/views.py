@@ -43,3 +43,25 @@ class TeacherList(View):
         context = {'teachers': Teacher.objects.all()}
         return render(request, 'teacher.html', context)
 
+class About(View):
+    def get(self, request):
+        return render(request, 'about.html')
+
+
+class Blog(View):
+    def get(self, request):
+        return render(request, 'blog.html')
+
+
+class ContactView(View):
+    def get(self, request):
+        return render(request, 'contact.html')
+
+class NotesView(View):
+    def get(self, request):
+        return render(request, 'notfound.html')
+
+
+class SinglePageView(View):
+    def get(self, request):
+        return render(request, 'single.html')
