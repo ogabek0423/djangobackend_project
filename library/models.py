@@ -35,4 +35,38 @@ class BookRecord(models.Model):
 
 
 
+class CourseSpeciality(models.Model):
+    name = models.CharField(max_length=20)
+    description = models.TextField()
+    image = models.ImageField(upload_to="library/cats")
+    create_date = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return self.name
+
+class CoursesRecord(models.Model):
+    course = models.ForeignKey(CourseSpeciality, on_delete=models.CASCADE)
+    name = models.CharField(max_length=20)
+    description = models.TextField()
+    create_date = models.DateTimeField(auto_now=True)
+    price = models.FloatField(default=1)
+    time = models.FloatField(default=90)
+    active_s = models.IntegerField(default=0)
+    image = models.ImageField(upload_to='media/library/courses')
+
+    def __str__(self):
+        return f"{self.name}"
+
+
+class Teacher(models.Model):
+    first_name = models.CharField(max_length=20)
+    last_name = models.CharField(max_length=20)
+    age = models.IntegerField()
+    image = models.ImageField(upload_to='media/users/')
+    shior = models.TextField()
+    specialty = models.ForeignKey(CourseSpeciality, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
 

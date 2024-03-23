@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.views import View
 from django.contrib.auth.models import User
 from django.http import HttpResponse
-from .models import Book
+from .models import Book, CoursesRecord, CourseSpeciality, Teacher
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 class BookListView(LoginRequiredMixin, View):
@@ -30,4 +30,16 @@ class BookDetailView(View):
         book = Book.objects.get(id=id)
         context = {'book': book}
         return render(request, 'library/book_detail.html', context)
+
+
+class CourseListView(View):
+    def get(self, request):
+        context = {'courses': CoursesRecord.objects.all()}
+        return render(request, 'courses.html', context)
+
+
+class TeacherList(View):
+    def get(self, request):
+        context = {'teachers': Teacher.objects.all()}
+        return render(request, 'teacher.html', context)
 
